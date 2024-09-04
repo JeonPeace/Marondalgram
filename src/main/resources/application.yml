@@ -12,6 +12,9 @@ spring:
     cache: false
   mvc:
     static-path-pattern: /static/**
+  jpa:
+    hibernate:
+      ddl-auto: none
 
 mybatis:
   mapper-locations: mappers/*Mapper.xml
