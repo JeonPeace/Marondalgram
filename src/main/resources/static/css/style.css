@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+#wrap {
+    width: 1200px;
+    height: 900px;
+    margin: 0 auto;
+}
+
+header {
+    height: 200px;
+
+}
+
+.contents > .input-box {
+    width: 400px;
+    background-color: #CCCCCC;
+}
+
+footer {
+    height: 70px;
+
+}
