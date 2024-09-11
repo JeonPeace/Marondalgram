@@ -11,6 +11,11 @@
                 <input type="text" placeholder="아이디" class="form-control mt-4" id="idInput">
                 <input type="password" placeholder="비밀번호" class="form-control mt-2" id="passwordInput">
                 <input type="password" placeholder="비밀번호 확인" class="form-control mt-2" id="passwordConfirmInput">
+                <div class="text-center mt-2">
+                    <label>프로필 사진 선택
+                    <input type="file" class="mt-2" id="fileInput">
+                    </label>
+                </div>
                 <button type="button" class="btn btn-secondary btn-block mt-3" id="joinBtn">가입</button>
                 <div class="text-center mt-3">
                     계정이 있으신가요? <a href="#">로그인</a>
@@ -29,6 +34,8 @@
                     let passwordConfirm = $("#passwordConfirmInput").val();
                     let name = $("#nameInput").val();
                     let email = $("#emailInput").val();
+                    
+                    let file = $("#fileInput")[0].files[0];
                     
                     if(id == ""){
                         alert("아이디를 입력하세요");
@@ -51,10 +58,20 @@
                         return;
                     }
                 
+                    let formData = new FormData();
+                    formData.append("loginId", id);
+                    formData.append("password", password);
+                    formData.append("name", name);
+                    formData.append("email", email);
+                    formData.append("profileImageFile", file);
+                    
                     $.ajax({
                         type:"post"
                         , url: "/user/join"
-                        , data: {"loginId":id, "password":password, "name":name, "email":email}
+                        , data: formData
+                        , enctype: "multipart/form-data" // 파일 업로드 필수
+                        , processData: false // 파일 업로드 필수
+                        , contentType: false // 파일 업로드 필수
                         , success:function(data){
                             if(data.result == "success"){
                                 location.href = "/user/login-view";
