@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileManager {
 
 	// 상수
-	public static final String FILE_UPLOAD_PATH = "D:\\jeonpeace\\springProject\\upload\\memo/";
+	public static final String FILE_UPLOAD_PATH = "D:\\jeonpeace\\springProject\\upload\\marondalgram/";
 	
 	// 파일 저장
 	public static String saveFile(MultipartFile file) {
