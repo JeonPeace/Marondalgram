@@ -21,18 +21,16 @@ public class UserService {
 		this.encoder = encoder;
 	}
 	
-	public User addUser(String loginId, String password, String email, String name, MultipartFile file) {
+	public User addUser(String loginId, String password, String email, String name) {
 		
 		String encryptPassword = encoder.encode(password);
-		
-		String urlPath = FileManager.saveFile(file);
+
 		
 		User user = User.builder()
 						.loginId(loginId)
 						.password(encryptPassword)
 						.email(email)
 						.name(name)
-						.profileImagePath(urlPath)
 						.build();
 		
 		User result = userRepository.save(user);
@@ -40,13 +38,26 @@ public class UserService {
 		return result;
 	}
 	
-//	public User getUser(String loginId, String password) {
-//		
-//		String encryptPassword = encoder.encode(password);
-//		
-//		User user = userRepository.findByLoginIdAndPassword(loginId, encryptPassword);
-//		
-//		return user;
-//	}
+	public User getUser(String loginId, String password) {
+		
+		String encryptPassword = encoder.encode(password);
+		
+		User user = userRepository.findByLoginIdAndPassword(loginId, encryptPassword);
+		
+		return user;
+	}
+	
+	public boolean checkDuplicate(String loginId) {
+		
+		User user = userRepository.findByLoginId(loginId);
+		
+		if(user == null) {
+			// 중복 안됨
+			return false;
+		}else {
+			// 중복됨
+			return true;
+		}
+	}
 	
 }

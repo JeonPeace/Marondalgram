@@ -1,4 +1,8 @@
 <!DOCTYPE html>
-        <header class="d-flex justify-content-start align-items-end">
+<html xmlns:th="http://www.thymeleaf.org">
+        <header class="d-flex justify-content-between align-items-end">
             <h1 class="ml-4">Marondalgram</h1>
-        </header>
+            <div th:if="${session.userId != null}" class="mr-4">
+                <span th:text="${session.userName}">nameSample</span> <a href="/user/logout">로그아웃</a>
+            </div> 
+        </header>       
