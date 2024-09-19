@@ -1,13 +1,25 @@
 package com.jeonpeace.marondalgram.user.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.jeonpeace.marondalgram.user.domain.User;
 
-public interface UserRepository extends JpaRepository<User, Integer>{
+@Mapper
+public interface UserRepository{
 
-	public User findByLoginIdAndPassword(String loginId, String password);
+	public int insertUser(
+			@Param("loginId") String loginId
+			, @Param("password") String password
+			, @Param("name") String name
+			, @Param("email") String email);
 	
-	public User findByLoginId(String loginId);
+	public int selectCountByLoginId(@Param("loginId") String loginId);
+	
+	public User selectUser(
+			@Param("loginId") String loginId
+			, @Param("password") String password);
+	
+	public User selectUserById(@Param("id") int id);
 	
 }

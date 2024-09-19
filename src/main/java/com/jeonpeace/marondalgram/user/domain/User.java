@@ -2,48 +2,57 @@ package com.jeonpeace.marondalgram.user.domain;
 
 import java.time.LocalDateTime;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
-@Table(name="user")
-@Entity
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
-@Builder(toBuilder = true)
 public class User {
-
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	
 	private int id;
-	
-	@Column(name="loginId")
 	private String loginId;
-	
 	private String password;
-	private String email;
 	private String name;
-	
-	@Column(name="profileImagePath")
-	private String profileImagePath;
-	
-	@CreationTimestamp
-	@Column(name="createdAt")
+	private String email;
 	private LocalDateTime createdAt;
-	
-	@UpdateTimestamp
-	@Column(name="updatedAt")
 	private LocalDateTime updatedAt;
+	
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getLoginId() {
+		return loginId;
+	}
+	public void setLoginId(String loginId) {
+		this.loginId = loginId;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getEmail() {
+		return email;
+	}
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+	public void setUpdatedAt(LocalDateTime updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 	
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jeonpeace.marondalgram.user.domain.User;
 import com.jeonpeace.marondalgram.user.service.UserService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 
 @RestController
@@ -20,44 +21,24 @@ public class UserRestController {
 
 	private UserService userService;
 	
-//	@Autowired
 	public UserRestController(UserService userService) {
 		this.userService = userService;
 	}
 	
 	@PostMapping("/join")
-	public Map<String, String> join(@RequestParam("loginId") String loginId
-									, @RequestParam("password") String password									
-									, @RequestParam("email") String email
-									, @RequestParam("name") String name){
+	public Map<String, String> join(
+			@RequestParam("loginId") String loginId
+			, @RequestParam("password") String password
+			, @RequestParam("name") String name
+			, @RequestParam("email") String email) {
+		
+		int count = userService.addUser(loginId, password, name, email);
 		
 		Map<String, String> resultMap = new HashMap<>();
 		
-		User user = userService.addUser(loginId, password, email, name);
-		
-		if(user != null) {
+		if(count == 1) {
 			resultMap.put("result", "success");
-		}else {
-			resultMap.put("result", "fail");
-		}
-		
-		return resultMap;
-	}
-
-	@PostMapping("/login")
-	public Map<String, String> login(@RequestParam("loginId") String loginId
-									, @RequestParam("password") String password
-									, HttpSession session){
-		
-		Map<String, String> resultMap = new HashMap<>();
-		
-		User user = userService.getUser(loginId, password);
-		
-		if(user != null) {
-			resultMap.put("result", "success");
-			session.setAttribute("userId", user.getId());
-			session.setAttribute("userName", user.getName());
-		}else {
+		} else {
 			resultMap.put("result", "fail");
 		}
 		
@@ -65,19 +46,46 @@ public class UserRestController {
 	}
 	
 	@GetMapping("/duplicate-id")
-	public Map<String, Boolean> checkDuplicate(@RequestParam(value="loginId", required=false) String loginId){
+	public Map<String, Boolean> isDuplicateId(@RequestParam("loginId") String loginId) {
 		
-		boolean isDuplicate = userService.checkDuplicate(loginId);
+		boolean isDuplicate = userService.isDuplicateId(loginId);
 		
 		Map<String, Boolean> resultMap = new HashMap<>();
 		
-		if(isDuplicate) {
-			resultMap.put("isDuplicate", true);
-		}else {
-			resultMap.put("isDuplicate", false);
+		resultMap.put("isDuplicate", isDuplicate);
+		
+		return resultMap;
+	}
+	
+	@PostMapping("/login")
+	public Map<String, String> login(
+			@RequestParam("loginId") String loginId
+			, @RequestParam("password") String password
+			, HttpServletRequest request) {
+		
+		User user = userService.getUser(loginId, password);
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(user != null) {
+			resultMap.put("result", "success");
+			
+			// HttpServletRequest 객체로 부터 얻어 온다. 
+			// 특정 클라이언트에서 사용될 session을 의미 
+			HttpSession session = request.getSession();
+			// key, value 형태의 데이터 관리 
+			// 로그인이 되었다는 정보를 저장 
+			// 어떤 페이지에서든 해당 정보를 사용할 수 있다. 
+			// 로그인된 사용자 정보를 저장해서 사용자 정보 기반의 페이지를 구성할 수 있다. 
+			session.setAttribute("userId", user.getId());
+			session.setAttribute("userName", user.getName());
+			
+		} else {
+			resultMap.put("result", "fail");
 		}
 		
 		return resultMap;
+		
 	}
 	
 }

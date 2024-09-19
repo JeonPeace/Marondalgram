@@ -1,5 +1,10 @@
 package com.jeonpeace.marondalgram.post.dto;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Builder
+@Getter
 public class CardView {
 
 	private int postId;
@@ -9,5 +14,7 @@ public class CardView {
 	private String imagePath;
 	
 	private String loginId;
+	
+	private int likeCount;
 	
 }

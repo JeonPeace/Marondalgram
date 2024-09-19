@@ -16,6 +16,16 @@ header {
     background-color: #CCCCCC;
 }
 
+#fileBtn {
+	
+	font-size: 35px;
+	
+}
+
+.timeline > .card {
+	width: 600px;
+}
+
 footer {
     height: 70px;
 

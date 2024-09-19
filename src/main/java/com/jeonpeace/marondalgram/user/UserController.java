@@ -13,14 +13,12 @@ public class UserController {
 	
 	@GetMapping("/join-view")
 	public String inputJoin() {
-		
 		return "user/join";
 	}
 	
 	@GetMapping("/login-view")
 	public String inputLogin() {
-		
-		return "user/login"; 
+		return "user/login";
 	}
 	
 	@GetMapping("/logout")
@@ -29,8 +27,10 @@ public class UserController {
 		HttpSession session = request.getSession();
 		
 		session.removeAttribute("userId");
-		session.removeAttribute("userName");
+		session.removeAttribute("userLoginId");
+		
 		
 		return "redirect:/user/login-view";
+		
 	}
 }

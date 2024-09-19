@@ -2,9 +2,6 @@ package com.jeonpeace.marondalgram.user.service;
 
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import com.jeonpeace.marondalgram.common.FileManager;
 import com.jeonpeace.marondalgram.common.HashingEncoder;
 import com.jeonpeace.marondalgram.user.domain.User;
 import com.jeonpeace.marondalgram.user.repository.UserRepository;
@@ -12,52 +9,50 @@ import com.jeonpeace.marondalgram.user.repository.UserRepository;
 @Service
 public class UserService {
 
+	// IoC (Inversion of Control) : 제어의 역전 
+	// DI(Dependency injection) : 의존성 주입 
 	private UserRepository userRepository;
-	
 	private HashingEncoder encoder;
 	
-	private UserService(UserRepository userRepository, @Qualifier("md5Hashing") HashingEncoder encoder) {
+	public UserService(UserRepository userRepository, @Qualifier("sha256Hashing") HashingEncoder encoder) {
 		this.userRepository = userRepository;
 		this.encoder = encoder;
 	}
 	
-	public User addUser(String loginId, String password, String email, String name) {
+	public int addUser(
+			String loginId
+			, String password
+			, String name
+			, String email) {
 		
 		String encryptPassword = encoder.encode(password);
-
 		
-		User user = User.builder()
-						.loginId(loginId)
-						.password(encryptPassword)
-						.email(email)
-						.name(name)
-						.build();
+		return userRepository.insertUser(loginId, encryptPassword, name, email);
 		
-		User result = userRepository.save(user);
+	}
+	
+	public boolean isDuplicateId(String loginId) {
 		
-		return result;
+		int count = userRepository.selectCountByLoginId(loginId);
+		
+		if(count == 0) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	public User getUser(String loginId, String password) {
 		
 		String encryptPassword = encoder.encode(password);
 		
-		User user = userRepository.findByLoginIdAndPassword(loginId, encryptPassword);
+		return userRepository.selectUser(loginId, encryptPassword);
 		
-		return user;
 	}
 	
-	public boolean checkDuplicate(String loginId) {
+	public User getUserById(int id) {
 		
-		User user = userRepository.findByLoginId(loginId);
-		
-		if(user == null) {
-			// 중복 안됨
-			return false;
-		}else {
-			// 중복됨
-			return true;
-		}
+		return userRepository.selectUserById(id);
 	}
 	
 }
