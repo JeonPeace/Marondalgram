@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.jeonpeace.marondalgram.post.dto.CardView;
 import com.jeonpeace.marondalgram.post.service.PostService;
 
+import jakarta.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/post")
 public class PostController {
@@ -21,9 +23,11 @@ public class PostController {
 	}
 	
 	@GetMapping("/timeline-view")
-	public String timeline(Model model) {
+	public String timeline(HttpSession session, Model model) {
 		
-		List<CardView> cardViewList = postService.getPostList();
+		int loginUserId = (Integer)session.getAttribute("userId");
+		
+		List<CardView> cardViewList = postService.getPostList(loginUserId);
 		
 		model.addAttribute("cardViewList", cardViewList);
 		

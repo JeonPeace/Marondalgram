@@ -30,8 +30,8 @@
                         <img class="w-100" th:src="${card.imagePath}">
                     </div>
                     <div class="p-2">
-                        <i class="bi bi-heart likeBtn" th:data-post-id="${card.postId}" th:data-user-id="${session.userId}"></i>
-                        <i class="bi bi-heart-fill text-danger unlikeBtn" th:data-post-id="${card.postId}"></i>               
+                        <i th:if="${card.loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-post-id="${card.postId}"></i>
+                        <i th:unless="${card.loginUserLike}" class="bi bi-heart likeBtn" th:data-post-id="${card.postId}"></i>             
                         <span th:text="${card.likeCount}">좋아요 11개</span> 
                     </div>
                     
@@ -42,16 +42,13 @@
                     <div class="comment-box">
                         <div class="pl-2">댓글</div>
                         <div class="p-2">
-                            <div>
-                                <b>bada</b><span>우하하하</span>
-                            </div>
-                            <div>
-                                <b>hagulu</b><span>좋다!!</span>
+                            <div th:each="comment, status:${card.commentList}">
+                                <b th:text="${comment.userLoginId}">bada</b> <span th:text=${comment.commentText}>우하하하</span>
                             </div>
                         </div>
                         <div class="d-flex justify-content-between">
-                            <input type="text" class="form-control col-10">
-                            <button type="button" class="btn btn-dark col-2 comment-btn">게시</button>
+                            <input type="text" class="form-control col-10 comment-text" th:id="|commentInput${card.postId}|">
+                            <button type="button" class="btn btn-dark col-2 comment-btn" th:data-post-id="${card.postId}">게시</button>
                         </div>
                     </div>
                 </div>
@@ -67,6 +64,33 @@
     <script layout:fragment="script">
         $(document).ready(function(){
         	
+        	$(".comment-btn").on("click", function(){
+        		
+        		let postId = $(this).data("post-id");
+        		let commentText = $("#commentInput" + postId).val();
+        		// let commentText = $(this).prev().val();
+        		
+        		$.ajax({
+        			
+        			type: "post"
+        			, url: "/post/comment/create"
+        			, data: {"postId":postId, "commentText":commentText}
+	                , success: function(data){
+	                    if(data.result == "success"){
+	                        alert("댓글 추가 완료!");
+	                        location.reload();
+	                    }else{
+	                        alert("댓글 추가 실패!!");
+	                    }
+	                }
+	                , error: function(){
+	                    alert("댓글 추가 에러!!");
+	                }
+        			
+        		});
+        		
+        	});
+        	
         	$(".likeBtn").on("click", function(){
         		
         		let postId = $(this).data("post-id");
@@ -79,8 +103,6 @@
                     , success: function(data){
                         if(data.result == "success"){
                             alert("좋아요 완료!");
-                            $(".likeBtn").addClass("d-none");
-                            $(".unlikeBtn").removeClass("d-none");
                             location.reload();
                         }else{
                             alert("좋아요 실패!!");
@@ -92,6 +114,30 @@
                 });      		
         		
         	});
+        	
+           $(".unlikeBtn").on("click", function(){
+                
+                let postId = $(this).data("post-id");
+
+                $.ajax({
+                    
+                    type: "delete"
+                    , url: "/post/unlike"
+                    , data: {"postId":postId}
+                    , success: function(data){
+                        if(data.result == "success"){
+                            alert("좋아요 해제 완료!");
+                            location.reload();
+                        }else{
+                            alert("좋아요 해제 실패!!");
+                        }
+                    }
+                    , error: function(){
+                        alert("좋아요 해제 에러!!");
+                    }
+                });             
+                
+            });
         	
         	$("#fileBtn").on("click", function(){
         		

@@ -1,5 +1,9 @@
 package com.jeonpeace.marondalgram.post.dto;
 
+import java.util.List;
+
+import com.jeonpeace.marondalgram.post.domain.Comment;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -16,5 +20,8 @@ public class CardView {
 	private String loginId;
 	
 	private int likeCount;
+	private Boolean loginUserLike;
+	
+	private List<Comment> commentList;
 	
 }
