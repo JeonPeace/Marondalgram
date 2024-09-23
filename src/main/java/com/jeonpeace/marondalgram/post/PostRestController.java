@@ -47,6 +47,22 @@ public class PostRestController {
 		return resultMap;
 	}
 	
+	@DeleteMapping("/delete")
+	public Map<String, String> deletePost(@RequestParam("postId") int postId){
+		
+		String result = postService.deletePost(postId);
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(result == "success") {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;
+	}
+	
 	@PostMapping("/like")
 	public Map<String, String> addLike(@RequestParam("postId") int postId
 									, HttpSession session){
@@ -67,7 +83,7 @@ public class PostRestController {
 	}
 	
 	@DeleteMapping("/unlike")
-	public Map<String, String> addUnlike(@RequestParam("postId") int postId
+	public Map<String, String> unlike(@RequestParam("postId") int postId
 									, HttpSession session){
 		
 		int userId = (Integer)session.getAttribute("userId");
@@ -104,5 +120,21 @@ public class PostRestController {
 		
 		return resultMap;
 	}
+	
+	@DeleteMapping("/comment/delete")
+	public Map<String, String> deleteComment(@RequestParam("commentId") int commentId){
+		
+		String result = postService.deleteComment(commentId);
+		
+		Map<String, String> resultMap = new HashMap<>();
+		
+		if(result == "success") {
+			resultMap.put("result", "success");
+		}else {
+			resultMap.put("result", "fail");
+		}
+		
+		return resultMap;	
+	}	
 	
 }

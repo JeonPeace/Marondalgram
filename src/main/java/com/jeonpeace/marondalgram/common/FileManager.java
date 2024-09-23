@@ -60,4 +60,10 @@ public class FileManager {
 		
 	}
 	
+	// 파일 삭제
+	public static void deleteFile(String imageFilePath) {
+		
+		
+	}
+	
 }

@@ -49,6 +49,21 @@ public class PostService {
 		return result;
 	}
 	
+	@Transactional
+	public String deletePost(int postId) {
+		
+		Post post = postRepository.findById(postId);
+		
+		if(post != null) {
+			likeRepository.deleteByPostId(postId);
+			commentRepository.deleteByPostId(postId);
+			postRepository.deleteById(postId);
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
+	
 	public List<CardView> getPostList(int loginUserId){
 		
 		List<Post> postList = postRepository.findAllByOrderByIdDesc();
@@ -131,5 +146,18 @@ public class PostService {
 		
 		return result;
 	}	
+	
+	@Transactional
+	public String deleteComment(int commentId) {
+		
+		Comment comment = commentRepository.findById(commentId);
+		
+		if(comment != null) {
+			commentRepository.deleteById(commentId);
+			return "success";
+		}else {
+			return "fail";
+		}
+	}
 	
 }
