@@ -60,10 +60,32 @@ public class FileManager {
 		
 	}
 	
-	// 파일 삭제
-	public static void deleteFile(String imageFilePath) {
+	public static boolean removeFile(String filePath) { // /images/2_8120980/test.png
 		
+		if(filePath == null) {
+			return false;
+		}
 		
+		// 파일 저장 경로 : "D:\\jeonpeace\\springProject\\upload\\memo/2_8120980/test.png";
+		String fullFilePath = FILE_UPLOAD_PATH + filePath.replace("/images", "");
+		
+		Path path = Paths.get(fullFilePath);
+		
+		// 폴더 경로 : "D:\\jeonpeace\\springProject\\upload\\memo";
+		// 폴더(디렉토리)제거
+		Path directoryPath = path.getParent();
+		
+		// 파일과 폴터(디렉토리) 존재하는지 확인
+		if(Files.exists(path) && Files.exists(directoryPath)) {
+			try {
+				Files.delete(path);
+				Files.delete(directoryPath);
+			} catch (IOException e) {
+				return false;
+			}
+		}
+		
+		return true;
 	}
 	
 }

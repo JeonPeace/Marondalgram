@@ -2,6 +2,7 @@ package com.jeonpeace.marondalgram.post.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -55,6 +56,7 @@ public class PostService {
 		Post post = postRepository.findById(postId);
 		
 		if(post != null) {
+			FileManager.removeFile(post.getImagePath());
 			likeRepository.deleteByPostId(postId);
 			commentRepository.deleteByPostId(postId);
 			postRepository.deleteById(postId);

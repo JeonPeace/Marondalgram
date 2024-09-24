@@ -18,6 +18,28 @@
             </div>
             <!-- /입력 상자 -->
             
+            
+                                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                  <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                      <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">삭제</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                          <span aria-hidden="true">&times;</span>
+                                        </button>
+                                      </div>
+                                      <div class="modal-body">
+                                        정말로 삭제하시겠습니까?
+                                      </div>
+                                      <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+                                        <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>            
+            
+            
             <!-- 타임라인 -->
             <div class="timeline my-4">
                 <!-- 카드 -->
@@ -35,9 +57,9 @@
 	                            <i th:if="${card.loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-post-id="${card.postId}"></i>
 	                            <i th:unless="${card.loginUserLike}" class="bi bi-heart likeBtn" th:data-post-id="${card.postId}"></i>
 	                            <span th:text="${card.likeCount}">좋아요 11개</span>                            
-                            </div>
+                            </div>                     
 	                        <div th:if="${session.userId == card.userId}" class="d-flex justify-content-end w-25">
-	                            <i class="bi bi-trash text-danger post-delete-btn" th:data-post-id="${card.postId}"></i>                                                   
+                                <i  class="bi bi-trash text-danger deleteIcon" data-toggle="modal" data-target="#exampleModal" th:data-post-id="${card.postId}"></i>  
 	                        </div>                                           
                         </div>                                         
                     </div>
@@ -79,9 +101,16 @@
     <script layout:fragment="script">
         $(document).ready(function(){
         	
-        	$(".post-delete-btn").on("click", function(){
+        	$(".deleteIcon").click(function(){
+        	    var data = $(this).data("post-id");
+        	    
+        	    $("#deleteBtn").data("post-id", data);
+        	    
+        	});
+        	
+        	$("#deleteBtn").on("click", function(){
         		
-        		let postId = $(this).data("postId");
+        		let postId = $(this).data("post-id");
         
                 $.ajax({
                     
