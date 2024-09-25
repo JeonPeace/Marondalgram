@@ -28,12 +28,17 @@
                                           <span aria-hidden="true">&times;</span>
                                         </button>
                                       </div>
-                                      <div class="modal-body">
-                                        정말로 삭제하시겠습니까?
-                                      </div>
+					<div class="modal-body">
+					  <h5>Popover in a modal</h5>
+					  <p>This <a href="#" role="button" class="btn btn-secondary popover-test" title="Popover title" data-bs-content="Popover body content is set in this attribute.">button</a> triggers a popover on click.</p>
+					  <hr>
+					  <h5>삭제</h5>
+					  <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+					  <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+					</div>
                                       <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
-                                        <button type="button" class="btn btn-danger" id="deleteBtn">삭제</button>
+                                        
                                       </div>
                                     </div>
                                   </div>
@@ -54,13 +59,13 @@
                     <div class="p-2">
                         <div class="d-flex">
                             <div class="w-75">
-	                            <i th:if="${card.loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-post-id="${card.postId}"></i>
-	                            <i th:unless="${card.loginUserLike}" class="bi bi-heart likeBtn" th:data-post-id="${card.postId}"></i>
-	                            <span th:text="${card.likeCount}">좋아요 11개</span>                            
+                                <i th:if="${card.loginUserLike}" class="bi bi-heart-fill text-danger unlikeBtn" th:data-post-id="${card.postId}"></i>
+                                <i th:unless="${card.loginUserLike}" class="bi bi-heart likeBtn" th:data-post-id="${card.postId}"></i>
+                                <span th:text="${card.likeCount}">좋아요 11개</span>                            
                             </div>                     
-	                        <div th:if="${session.userId == card.userId}" class="d-flex justify-content-end w-25">
+                            <div th:if="${session.userId == card.userId}" class="d-flex justify-content-end w-25">
                                 <i  class="bi bi-trash text-danger postDeleteIcon" data-toggle="modal" data-target="#exampleModal" th:data-post-id="${card.postId}"></i>  
-	                        </div>                                           
+                            </div>                                           
                         </div>                                         
                     </div>
                     
@@ -72,15 +77,15 @@
                         <div class="pl-2">댓글</div>
                         <div class="p-2">
                             <div th:each="comment, status:${card.commentList}">
-	                            <div class="d-flex">
-		                            <div class="w-75">
-	                                   <b th:text="${comment.userLoginId}">bada</b>
-	                                   <span th:text=${comment.commentText}>우하하하</span>		                            
-		                            </div>
-	                               <div th:if="${session.userId == comment.userId}" class="d-flex justify-content-end w-25">
-	                                   <i class="bi bi-trash commentDeleteIcon" data-toggle="modal" data-target="#exampleModal" th:data-comment-id="${comment.id}"></i>                                                                
-	                               </div>
-	                            </div>                                
+                                <div class="d-flex">
+                                    <div class="w-75">
+                                       <b th:text="${comment.userLoginId}">bada</b>
+                                       <span th:text=${comment.commentText}>우하하하</span>                                 
+                                    </div>
+                                   <div th:if="${session.userId == comment.userId}" class="d-flex justify-content-end w-25">
+                                       <i class="bi bi-trash commentDeleteIcon" data-toggle="modal" data-target="#exampleModal" th:data-comment-id="${comment.id}"></i>                                                                
+                                   </div>
+                                </div>                                
                             </div>
                         </div>
                         <div class="d-flex justify-content-between">
@@ -100,39 +105,39 @@
     
     <script layout:fragment="script">
         $(document).ready(function(){
-        	
-        	$(".postDeleteIcon").click(function(){
-        		
-        	    var data = $(this).data("post-id");
-        	    
-        	    $("#deleteBtn").data("post-id", data);
-        	    
-        	});
-        	
-        	$(".commentDeleteIcon").click(function(){
-        		
-        		var data = $(this).data("comment-id");
-        		
-        		$("#deleteBtn").data("comment-id", data);
-        		
-        	});
-        	
-        	$("#deleteBtn").on("click", function(){
-        		
-        		let postId = $(this).data("post-id");
-        		let commentId = $(this).data("comment-id");
-        	    
-        		let url = "";
+            
+            $(".postDeleteIcon").click(function(){
+                
+                var data = $(this).data("post-id");
+                
+                $("#deleteBtn").data("post-id", data);
+                
+            });
+            
+            $(".commentDeleteIcon").click(function(){
+                
+                var data = $(this).data("comment-id");
+                
+                $("#deleteBtn").data("comment-id", data);
+                
+            });
+            
+            $("#deleteBtn").on("click", function(){
+                
+                let postId = $(this).data("post-id");
+                let commentId = $(this).data("comment-id");
+                
+                let url = "";
                 let dataDictionary = {}; 
-        		
-        		if(postId == null && commentId != null){
-        			url = "/post/comment/delete";
-        			dataDictionary["commentId"] = commentId;
-        		}else{
-        			url = "/post/delete";
-        			dataDictionary["postId"] = postId;
-        		}
-        		
+                
+                if(postId == null && commentId != null){
+                    url = "/post/comment/delete";
+                    dataDictionary["commentId"] = commentId;
+                }else{
+                    url = "/post/delete";
+                    dataDictionary["postId"] = postId;
+                }
+                
                 $.ajax({
                     
                     type: "delete"
@@ -150,19 +155,19 @@
                         alert("삭제 에러!!");
                     }
                     
-                });        		
-        		
-        	});
-        	
+                });             
+                
+            });
+            
 
             
            
-        	$(".comment-btn").on("click", function(){
-        		
-        		let postId = $(this).data("post-id");
-        		let commentText = $("#commentInput" + postId).val();
-        		// let commentText = $(this).prev().val();
-        		
+            $(".comment-btn").on("click", function(){
+                
+                let postId = $(this).data("post-id");
+                let commentText = $("#commentInput" + postId).val();
+                // let commentText = $(this).prev().val();
+                
                 $.ajax({
                     
                     type: "post"
@@ -181,12 +186,12 @@
                     }
                     
                 });
-        		
-        	});
-        	
-        	$(".likeBtn").on("click", function(){
-        		
-        		let postId = $(this).data("post-id");
+                
+            });
+            
+            $(".likeBtn").on("click", function(){
+                
+                let postId = $(this).data("post-id");
 
                 $.ajax({
                     
@@ -204,10 +209,10 @@
                     , error: function(){
                         alert("좋아요 에러!!");
                     }
-                });      		
-        		
-        	});
-        	
+                });             
+                
+            });
+            
            $(".unlikeBtn").on("click", function(){
                 
                 let postId = $(this).data("post-id");
@@ -231,15 +236,15 @@
                 });             
                 
             });
-        	
-        	$("#fileBtn").on("click", function(){
-        		
-        		$("#fileInput").click();
-        		
-        	});
-        	
-        	$("#uploadBtn").on("click", function(){
-        		
+            
+            $("#fileBtn").on("click", function(){
+                
+                $("#fileInput").click();
+                
+            });
+            
+            $("#uploadBtn").on("click", function(){
+                
                 let contents = $("#contentsInput").val();
                 
                 let file = $("#fileInput")[0].files[0]; // .files[첫번째 파일]
@@ -263,7 +268,7 @@
                     , contentType: false // 파일 업로드 필수
                     , success: function(data){
                         if(data.result == "success"){
-                        	alert("게시글 추가 성공!!");
+                            alert("게시글 추가 성공!!");
                             location.href = "/post/timeline-view";
                         }else{
                             alert("게시글 추가 실패!!");
