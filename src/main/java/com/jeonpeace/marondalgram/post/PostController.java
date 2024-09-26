@@ -34,4 +34,16 @@ public class PostController {
 		return "/post/timeline";
 	}
 	
+	@GetMapping("/timeline2-view")
+	public String timeline2(HttpSession session, Model model) {
+		
+		int loginUserId = (Integer)session.getAttribute("userId");
+		
+		List<CardView> cardViewList = postService.getPostList(loginUserId);
+		
+		model.addAttribute("cardViewList", cardViewList);
+		
+		return "/post/timeline2";
+	}
+	
 }
